@@ -17,8 +17,6 @@ export default function MovieList({ movies }: MovieListProps) {
     }
   }, [movies]);
 
-  console.log("movies from tmdb", movies);
-  console.log("movies state", movieList);
   return (
     <div className="p-8 text-white">
       <h1 className="text-3xl font-bold mb-4">Welcome to MYFLIX</h1>
