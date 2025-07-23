@@ -17,6 +17,7 @@ const RegisterForm = () => {
   const [state, action, pending] = useActionState(signup, undefined);
   const [email, setEmail] = useState("");
   const [emailValid, setEmailValid] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (email !== "") {
@@ -28,12 +29,13 @@ const RegisterForm = () => {
 
   const checkUserExists = async () => {
     if (email !== "") {
+      setLoading(true);
       const user = await getUser(email);
 
       if (user) {
         router.push("/login");
-        console.log("User exists");
       } else {
+        setLoading(false);
         setUserExists(true);
       }
     }
@@ -55,8 +57,9 @@ const RegisterForm = () => {
               <button
                 onClick={() => checkUserExists()}
                 className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded flex items-center justify-center text-lg ml-2"
+                disabled={loading}
               >
-                Get Started
+                {loading ? "Please wait..." : "Get Started"}
                 <ChevronRight />
               </button>
             </div>
@@ -116,11 +119,11 @@ const RegisterForm = () => {
                   </div>
                   {state?.errors?.password && <p>{state.errors.password}</p>}
                   <Button
-                    className="bg-red-600 text-white hover:bg-red-700 cursor-pointer rounded-none"
+                    className="bg-red-600 text-white hover:bg-red-700 cursor-pointer rounded-none disabled:cursor-not-allowed disabled:bg-red-700"
                     type="submit"
                     disabled={pending}
                   >
-                    Sing Up
+                    {pending ? "Please wait..." : "Sing Up"}
                   </Button>
                 </div>
               </form>

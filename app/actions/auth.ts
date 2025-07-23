@@ -6,6 +6,7 @@ import { User } from "@/types/User";
 import bcrypt from "bcrypt";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 
 export async function signup(state: FormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
@@ -41,7 +42,7 @@ export async function signup(state: FormState, formData: FormData) {
     };
   }
 
-  Response.redirect(new URL("/login"));
+  redirect("/login");
 }
 
 export async function authenticate(
