@@ -2,12 +2,23 @@
 
 import { Movie } from "@/types/Movies";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { useEffect, useState } from "react";
 
 interface MovieListProps {
   movies?: Movie[];
 }
 
 export default function MovieList({ movies }: MovieListProps) {
+  const [movieList, setMovieLIst] = useState<Movie[]>([]);
+
+  useEffect(() => {
+    if (movies) {
+      setMovieLIst(movies);
+    }
+  }, [movies]);
+
+  console.log("movies from tmdb", movies);
+  console.log("movies state", movieList);
   return (
     <div className="p-8 text-white">
       <h1 className="text-3xl font-bold mb-4">Welcome to MYFLIX</h1>
@@ -15,7 +26,7 @@ export default function MovieList({ movies }: MovieListProps) {
         This is a demonstration of a Netflix-like browse page
       </p>
       <div className="h-[1000px] bg-gray-800 mt-8 flex flex-wrap items-center justify-center text-gray-500 text-2xl gap-6">
-        {movies?.map((movie, idx) => (
+        {movieList.map((movie, idx) => (
           <Card key={idx}>
             <CardHeader>
               <CardTitle className="text-lg">{movie.title}</CardTitle>
