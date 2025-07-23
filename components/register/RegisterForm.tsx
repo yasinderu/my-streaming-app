@@ -4,42 +4,64 @@ import { Card, CardContent } from "../ui/card";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useActionState, useState } from "react";
-import { signup } from "@/app/actions/auth";
+import { useActionState, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { signup, getUser } from "@/app/actions/auth";
+// import { getUser } from "@/app/actions/user";
 
-interface RegisterFormProps {
-  getUser?: () => void;
-}
+const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-const RegisterForm = ({ getUser }: RegisterFormProps) => {
+const RegisterForm = () => {
+  const router = useRouter();
   const [userExists, setUserExists] = useState(false);
   const [state, action, pending] = useActionState(signup, undefined);
   const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(true);
+
+  useEffect(() => {
+    if (email !== "") {
+      const emailIsValid = emailRegex.test(email);
+
+      setEmailValid(emailIsValid);
+    }
+  }, [email]);
 
   const checkUserExists = async () => {
-    console.log("hello world");
-    setUserExists(true);
+    if (email !== "") {
+      const user = await getUser(email);
+
+      if (user) {
+        router.push("/login");
+        console.log("User exists");
+      } else {
+        setUserExists(true);
+      }
+    }
   };
+
   return (
     <>
       {!userExists ? (
-        <div className="flex items-center justify-center mt-[24px]">
-          <div className="flex w-full">
-            <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              className="flex-grow p-4 text-lg text-white rounded-l focus:outline-none focus:ring-2 focus:ring-slate-500 border border-gray-700"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button
-              onClick={() => checkUserExists()}
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded flex items-center justify-center text-lg ml-2"
-            >
-              Get Started
-              <ChevronRight />
-            </button>
+        <div className="text-start">
+          <div className="flex flex-col items-center justify-center mt-[24px]">
+            <div className="flex w-full">
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                className="flex-grow p-4 text-lg text-white rounded-l focus:outline-none focus:ring-2 focus:ring-slate-500 border border-gray-700"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <button
+                onClick={() => checkUserExists()}
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded flex items-center justify-center text-lg ml-2"
+              >
+                Get Started
+                <ChevronRight />
+              </button>
+            </div>
           </div>
+          {!emailValid && <p className="py-2">Please enter a valid email</p>}
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center mt-[10%]">
@@ -63,6 +85,7 @@ const RegisterForm = ({ getUser }: RegisterFormProps) => {
                       name="email"
                       id="email"
                       value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="flex-grow p-4 text-lg text-white rounded-l focus:outline-none focus:ring-2 focus:ring-slate-500 border border-gray-700"
                     />
                   </div>
