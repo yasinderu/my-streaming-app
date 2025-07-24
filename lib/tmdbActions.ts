@@ -18,6 +18,7 @@ export async function fetchMovies(): Promise<Movie[] | undefined> {
         overview: movie.overview,
         release_date: movie.release_date,
         poster_path: `${tmdbBaseImageUrl}${movie.poster_path}`,
+        backdrop_path: `${tmdbBaseImageUrl}${movie.backdrop_path}`,
       };
     });
 

@@ -7,7 +7,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signup, getUser } from "@/app/actions/auth";
-// import { getUser } from "@/app/actions/user";
 
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 

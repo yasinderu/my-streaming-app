@@ -1,3 +1,4 @@
+import Hero from "@/components/browse/Hero";
 import MovieList from "@/components/browse/MovieList";
 import NavigationMenu from "@/components/NavigationMenu";
 import { fetchMovies } from "@/lib/tmdbActions";
@@ -8,6 +9,7 @@ export default async function BrowseMoviePage() {
   return (
     <div>
       <NavigationMenu />
+      <Hero />
       <MovieList movies={movies} />
     </div>
   );
