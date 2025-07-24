@@ -9,7 +9,7 @@ export async function fetchMovies(): Promise<Movie[] | undefined> {
   try {
     const res = await tmdbClient.get("/movie/popular");
 
-    const results = res.data.results.slice(0, 10);
+    const results = res.data.results;
 
     const movies: Movie[] = results.map((movie: Movie) => {
       return {

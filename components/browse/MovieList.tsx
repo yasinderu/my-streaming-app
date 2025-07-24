@@ -28,13 +28,6 @@ export default function MovieList({ movies }: MovieListProps) {
     }
   };
 
-  useEffect(() => {
-    checkScroll();
-    const handleResize = () => checkScroll();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const scrollHorizontally = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const scrollAmount = scrollRef.current.offsetWidth * 0.7;
