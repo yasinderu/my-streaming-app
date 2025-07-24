@@ -1,5 +1,7 @@
 "use client";
 
+import { Play, Info } from "lucide-react";
+
 export default function Hero() {
   return (
     <section className="relative w-full h-screen flex items-center justify-start pl-12 overflow-hidden">
@@ -16,16 +18,16 @@ export default function Hero() {
           </p>
         </div>
         <div className="flex space-x-4 mb-8">
-          <button className="flex items-center px-6 py-3 bg-white text-black font-bold rounded-md text-lg hover:bg-gray-200 transition-colors">
-            <i className="fas fa-play mr-2"></i> Play
+          <button className="flex items-center px-6 py-3 bg-white text-black font-bold rounded-md text-lg hover:bg-gray-200 transition-colors gap-2 cursor-pointer">
+            <Play /> Play
           </button>
-          <button className="flex items-center px-6 py-3 bg-gray-600 bg-opacity-70 text-white font-bold rounded-md text-lg hover:bg-gray-700 hover:bg-opacity-70 transition-colors">
-            <i className="fas fa-info-circle mr-2"></i> More Info
+          <button className="flex items-center px-6 py-3 bg-gray-600 bg-opacity-70 text-white font-bold rounded-md text-lg hover:bg-gray-700 hover:bg-opacity-70 transition-colors gap-2 cursor-pointer">
+            <Info /> More Info
           </button>
         </div>
       </div>
 
-      <div className="absolute bottom-5 right-12 bg-black bg-opacity-70 pl-4 pr-6 py-2 border-l-4 border-red-600 font-bold text-lg">
+      <div className="absolute bottom-20 right-12 bg-black bg-opacity-70 pl-4 pr-6 py-2 border-l-4 border-red-600 font-bold text-lg">
         <span>13+</span>
       </div>
     </section>

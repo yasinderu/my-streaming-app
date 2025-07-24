@@ -49,14 +49,14 @@ export default function MovieList({ movies }: MovieListProps) {
   return (
     <>
       <div className="overflow-x-hidden text-white">
-        <section className="relative px-12 py-8 mt-16">
+        <section className="relative py-8 mt-16">
           <h2 className="text-2xl font-bold mb-4 text-white hover:text-gray-300 cursor-pointer">
             Popular
           </h2>
           <div className="relative group">
             {showLeftArrow && (
               <button
-                className="absolute cursor-pointer left-0 top-1/2 -translate-y-1/2 text-white p-3 rounded-full hidden group-hover:flex items-center justify-center z-20 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                className="absolute cursor-pointer bg-black/50 backdrop-opacity-20 left-0 top-1/2 -translate-y-1/2 text-white p-3 rounded-full hidden group-hover:flex items-center justify-center z-20 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
                 onClick={() => scrollHorizontally("left")}
               >
                 <ChevronLeft className="w-20 h-20" />
@@ -66,7 +66,7 @@ export default function MovieList({ movies }: MovieListProps) {
             <div
               ref={scrollRef}
               onScroll={checkScroll}
-              className="flex overflow-x-scroll scrollbar-hide space-x-2.5 relative py-2"
+              className="flex overflow-x-hidden scrollbar-hide space-x-2.5 relative py-2"
             >
               {movieList.map((movie: Movie, idx) => (
                 <div
@@ -85,7 +85,7 @@ export default function MovieList({ movies }: MovieListProps) {
 
             {showRightArrow && (
               <button
-                className="absolute cursor-pointer right-0 top-1/2 -translate-y-1/2 bg-none text-white p-3 rounded-full hidden group-hover:flex items-center justify-center z-20 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                className="absolute cursor-pointer bg-black/40 right-0 top-1/2 -translate-y-1/2 bg-none text-white p-3 rounded-full hidden group-hover:flex items-center justify-center z-20 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
                 onClick={() => scrollHorizontally("right")}
               >
                 <ChevronRight className="w-20 h-20" />
