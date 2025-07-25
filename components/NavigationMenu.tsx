@@ -1,17 +1,12 @@
 import React from "react";
 
 import { ChevronDown, Bell, Search } from "lucide-react";
+import Image from "next/image";
 
 const NavigationMenu = () => {
   return (
     <nav className="flex items-center justify-between h-16 px-8 bg-black sticky top-0 z-50">
       <div className="flex items-center">
-        {/* <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/170px-Netflix_2015_logo.svg.png"
-            alt="Netflix Logo"
-            className="h-6 mr-8"
-          /> */}
-
         <ul className="flex space-x-7 text-white text-sm font-normal">
           <li>
             <a
@@ -72,10 +67,12 @@ const NavigationMenu = () => {
         </div>
 
         <div className="flex items-center space-x-2 cursor-pointer">
-          <img
+          <Image
             src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
             alt="Profile"
-            className="w-8 h-8 rounded"
+            width={36}
+            height={36}
+            className="rounded"
           />
           <ChevronDown />
         </div>
