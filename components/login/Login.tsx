@@ -10,13 +10,10 @@ import {
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { authenticate } from "@/app/actions/auth";
 
 const Login = () => {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "browse";
   const [error, action, pending] = useActionState(authenticate, undefined);
   return (
     <Card className="xl:w-[434px] sm:w-sm rounded-sm mt-[10%]">
