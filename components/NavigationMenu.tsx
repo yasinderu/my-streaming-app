@@ -37,7 +37,7 @@ const NavigationMenu = () => {
   const handleSignOut = async () => {
     try {
       const res = await fetch("/api/auth/logout", {
-        method: "POST",
+        method: "GET",
       });
 
       console.log(res);

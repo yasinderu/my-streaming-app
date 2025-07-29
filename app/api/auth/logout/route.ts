@@ -1,7 +1,9 @@
+"use server";
+
 import { signOut } from "@/auth";
 import { NextRequest } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   await signOut({ redirectTo: "/" });
 
   return new Response(
