@@ -1,9 +1,58 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
 
 import { ChevronDown, Bell, Search } from "lucide-react";
 import Image from "next/image";
+import { MENU_ACTIONS } from "@/lib/contants";
+import { useRouter } from "next/navigation";
 
 const NavigationMenu = () => {
+  const [profileIsOpen, setProfileIsOpen] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setProfileIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside as EventListener);
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside as EventListener
+      );
+    };
+  });
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+
+      console.log(res);
+
+      if (res.ok) {
+        router.push("/");
+      } else {
+        const errorData = await res.json();
+        console.log(errorData.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <nav className="flex items-center justify-between h-16 px-8 bg-black sticky top-0 z-50">
       <div className="flex items-center">
@@ -66,15 +115,49 @@ const NavigationMenu = () => {
           {/* <span className="absolute -top-1 -right-1 bg-red-600 rounded-full h-3 w-3"></span> */}
         </div>
 
-        <div className="flex items-center space-x-2 cursor-pointer">
-          <Image
-            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-            alt="Profile"
-            width={36}
-            height={36}
-            className="rounded"
-          />
-          <ChevronDown />
+        <div className="relative z-50">
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            ref={buttonRef}
+            onClick={() => setProfileIsOpen(!profileIsOpen)}
+            aria-expanded={profileIsOpen ? "true" : "false"}
+            aria-haspopup="menu"
+          >
+            <Image
+              src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+              alt="Profile"
+              width={36}
+              height={36}
+              className="rounded"
+            />
+            <ChevronDown />
+          </div>
+          {profileIsOpen && (
+            <div
+              ref={menuRef}
+              role="menu"
+              aria-orientation="vertical"
+              className="absolute right-0 mt-2 w-72 bg-black border border-gray-700 shadow-lg transform origin-top-right transition-all duration-200 ease-out animate-fade-in-up"
+            >
+              {MENU_ACTIONS.map((action, idx) => (
+                <a
+                  key={idx}
+                  href="#"
+                  className="flex items-center px-4 py-2 text-white hover:bg-gray-800 text-sm"
+                >
+                  {action.name}
+                </a>
+              ))}
+              <form action={handleSignOut}>
+                <button
+                  className="w-full text-center px-4 py-2 text-white hover:bg-gray-800 text-sm cursor-pointer border-t-2"
+                  role="menuitem"
+                >
+                  Sing out
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </nav>

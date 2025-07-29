@@ -12,3 +12,18 @@ export const MOVIE_SECTION_TITLES = [
     queryText: "top_rated",
   },
 ];
+
+export const MENU_ACTIONS = [
+  {
+    name: "Manage Profile",
+  },
+  {
+    name: "Account",
+  },
+  {
+    name: "Help Center",
+  },
+  {
+    name: "Exit Profile",
+  },
+];

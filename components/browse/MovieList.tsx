@@ -6,7 +6,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import MovieCard from "./MovieCard";
 import { fetchMovies } from "@/lib/tmdbActions";
 interface MovieListProps {
-  movies?: Movie[];
   sectionTitle: string;
   queryTitle: string;
 }
@@ -27,12 +26,6 @@ export default function MovieList({
 
     getMovie(queryTitle);
   }, []);
-
-  // useEffect(() => {
-  //   if (movies) {
-  //     setMovieLIst(movies);
-  //   }
-  // }, [movies]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
