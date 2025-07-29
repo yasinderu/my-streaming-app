@@ -11,6 +11,10 @@ export const MOVIE_SECTION_TITLES = [
     displayText: "Top Rated",
     queryText: "top_rated",
   },
+  {
+    displayText: "My List",
+    queryText: "favorite",
+  },
 ];
 
 export const MENU_ACTIONS = [

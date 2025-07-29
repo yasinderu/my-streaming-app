@@ -1,15 +1,50 @@
 "use client";
 
-import { ChevronDown, PlayCircle, PlusCircle, ThumbsUp } from "lucide-react";
+import { useFavorite } from "@/contexts/FavoriteMovieContext";
+import {
+  CheckCircle,
+  ChevronDown,
+  PlayCircle,
+  PlusCircle,
+  ThumbsUp,
+} from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface MovieCardProps {
+  id: string;
   title: string;
   overview?: string;
   poster: string | undefined;
+  addToFavoriteHandler: (movieId: string) => void;
+  removeFromFavoriteHandler: (movieId: string) => void;
 }
 
-export default function MovieCard({ title, poster }: MovieCardProps) {
+export default function MovieCard({
+  title,
+  poster,
+  id,
+  addToFavoriteHandler,
+  removeFromFavoriteHandler,
+}: MovieCardProps) {
+  const saveToFavorite = (id: string) => {
+    addToFavoriteHandler(id);
+  };
+  const { favorite } = useFavorite();
+  const [isFavoriteMovie, setIsFavoriteMovie] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (favorite.movies.find((movie) => movie.id === id)) {
+      setIsFavoriteMovie(true);
+    } else {
+      setIsFavoriteMovie(false);
+    }
+  }, [favorite.movies]);
+
+  const removeFromFavorite = (id: string) => {
+    removeFromFavoriteHandler(id);
+  };
+
   return (
     <div className="group">
       <div className="flex-none w-36 relative cursor-pointer group">
@@ -32,7 +67,17 @@ export default function MovieCard({ title, poster }: MovieCardProps) {
         <div className="flex justify-between p-6 items-center">
           <div className="flex space-x-3 items-center">
             <PlayCircle className="h-8 w-8" />
-            <PlusCircle className="h-8 w-8" />
+            {isFavoriteMovie ? (
+              <CheckCircle
+                className="h-8 w-8 cursor-pointer"
+                onClick={() => removeFromFavorite(id)}
+              />
+            ) : (
+              <PlusCircle
+                className="h-8 w-8 cursor-pointer"
+                onClick={() => saveToFavorite(id)}
+              />
+            )}
             <ThumbsUp />
           </div>
           <ChevronDown />

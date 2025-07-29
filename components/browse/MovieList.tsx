@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import MovieCard from "./MovieCard";
 import { fetchMovies } from "@/lib/tmdbActions";
+import { useFavorite } from "@/contexts/FavoriteMovieContext";
 interface MovieListProps {
   sectionTitle: string;
   queryTitle: string;
@@ -15,6 +16,7 @@ export default function MovieList({
   queryTitle,
 }: MovieListProps) {
   const [movieList, setMovieLIst] = useState<Movie[]>([]);
+  const { favorite, addMovie, removeMovie } = useFavorite();
 
   useEffect(() => {
     async function getMovie(query: string) {
@@ -24,8 +26,16 @@ export default function MovieList({
       }
     }
 
-    getMovie(queryTitle);
+    if (queryTitle !== "favorite") {
+      getMovie(queryTitle);
+    }
   }, []);
+
+  useEffect(() => {
+    if (queryTitle === "favorite") {
+      setMovieLIst(favorite.movies);
+    }
+  }, [favorite]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -50,47 +60,66 @@ export default function MovieList({
     }
   };
 
+  const addToFavoriteHandler = (movieId: string) => {
+    const selectedMovie = movieList.find(
+      (movie) => movie.id === movieId
+    ) as Movie;
+
+    addMovie(selectedMovie);
+  };
+
+  const removeFromFavoriteHandler = (movieId: string) => {
+    removeMovie(movieId);
+  };
+
   return (
-    <div className="text-white">
-      <section className="relative py-8 mt-16">
-        <h2 className="text-2xl font-bold mb-4 text-white hover:text-gray-300 cursor-pointer ml-4">
-          {sectionTitle}
-        </h2>
-        <div className="relative">
-          {showLeftArrow && (
-            <button
-              className="absolute cursor-pointer bg-gradient-to-r from-black via-black/0 left-0 top-1/2 -translate-y-1/2 text-white p-3 pr-8 h-full flex items-center justify-center z-20 transition-opacity duration-300 opacity-100"
-              onClick={() => scrollHorizontally("left")}
-            >
-              <ChevronLeft className="w-20 h-20" />
-            </button>
-          )}
+    <>
+      {movieList.length && (
+        <div className="text-white">
+          <section className="relative py-8 mt-16">
+            <h2 className="text-2xl font-bold mb-4 text-white hover:text-gray-300 cursor-pointer ml-4">
+              {sectionTitle}
+            </h2>
+            <div className="relative">
+              {showLeftArrow && (
+                <button
+                  className="absolute cursor-pointer bg-gradient-to-r from-black via-black/0 left-0 top-1/2 -translate-y-1/2 text-white p-3 pr-8 h-full flex items-center justify-center z-20 transition-opacity duration-300 opacity-100"
+                  onClick={() => scrollHorizontally("left")}
+                >
+                  <ChevronLeft className="w-20 h-20" />
+                </button>
+              )}
 
-          <div
-            ref={scrollRef}
-            onScroll={checkScroll}
-            className="flex overflow-hidden px-6 space-x-2.5 relative py-2"
-          >
-            {movieList.map((movie: Movie, idx) => (
-              <MovieCard
-                key={idx}
-                title={movie.title}
-                overview={movie.overview}
-                poster={movie.poster_path}
-              />
-            ))}
-          </div>
+              <div
+                ref={scrollRef}
+                onScroll={checkScroll}
+                className="flex px-6 space-x-2.5 relative py-2"
+              >
+                {movieList.map((movie: Movie, idx) => (
+                  <MovieCard
+                    key={idx}
+                    id={movie.id}
+                    addToFavoriteHandler={addToFavoriteHandler}
+                    removeFromFavoriteHandler={removeFromFavoriteHandler}
+                    title={movie.title}
+                    overview={movie.overview}
+                    poster={movie.poster_path}
+                  />
+                ))}
+              </div>
 
-          {showRightArrow && (
-            <button
-              className="absolute cursor-pointer bg-gradient-to-r via-black/70 to-black right-0 top-1/2 -translate-y-1/2 text-white p-3 pl-6 h-full flex items-center justify-center z-20 transition-opacity duration-300 opacity-100"
-              onClick={() => scrollHorizontally("right")}
-            >
-              <ChevronRight className="w-20 h-20" />
-            </button>
-          )}
+              {showRightArrow && (
+                <button
+                  className="absolute cursor-pointer bg-gradient-to-r via-black/70 to-black right-0 top-1/2 -translate-y-1/2 text-white p-3 pl-6 h-full flex items-center justify-center z-20 transition-opacity duration-300 opacity-100"
+                  onClick={() => scrollHorizontally("right")}
+                >
+                  <ChevronRight className="w-20 h-20" />
+                </button>
+              )}
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
+      )}
+    </>
   );
 }

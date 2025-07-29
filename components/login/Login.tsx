@@ -10,10 +10,13 @@ import {
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { authenticate } from "@/app/actions/auth";
 
 const Login = () => {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/browse";
   const [error, action, pending] = useActionState(authenticate, undefined);
   return (
     <Card className="xl:w-[434px] sm:w-sm rounded-sm mt-[10%]">
@@ -53,7 +56,7 @@ const Login = () => {
                 className="flex-grow p-4 text-lg text-white rounded-l focus:outline-none focus:ring-2 focus:focus:ring-slate-500 border border-gray-700"
               />
             </div>
-            {/* <input type="hidden" name="redirectTo" value={callbackUrl} /> */}
+            <input type="hidden" name="redirectTo" value={callbackUrl} />
             <Button
               className="bg-red-600 text-white hover:bg-red-700 cursor-pointer rounded-none"
               type="submit"
