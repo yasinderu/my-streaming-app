@@ -5,11 +5,11 @@ import Image from "next/image";
 
 interface MovieCardProps {
   title: string;
-  overview: string;
+  overview?: string;
   poster: string | undefined;
 }
 
-export default function MovieCard({ title, overview, poster }: MovieCardProps) {
+export default function MovieCard({ title, poster }: MovieCardProps) {
   return (
     <div className="group">
       <div className="flex-none w-36 relative cursor-pointer group">
@@ -22,7 +22,6 @@ export default function MovieCard({ title, overview, poster }: MovieCardProps) {
         />
       </div>
       <div className="absolute z-30 top-0 scale-0 bg-slate-800 w-56 transition duration-200 group-hover:scale-140 opacity-0 delay-300 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-x-[3vw]">
-        {/* <div> */}
         <Image
           src={poster || ""}
           alt={title}
@@ -39,7 +38,6 @@ export default function MovieCard({ title, overview, poster }: MovieCardProps) {
           <ChevronDown />
         </div>
         <p className="px-6 py-2 text-white">Exciting · Kids · Rivalry</p>
-        {/* </div> */}
       </div>
     </div>
   );

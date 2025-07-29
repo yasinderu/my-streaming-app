@@ -4,18 +4,35 @@ import { Movie } from "@/types/Movies";
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import MovieCard from "./MovieCard";
+import { fetchMovies } from "@/lib/tmdbActions";
 interface MovieListProps {
   movies?: Movie[];
+  sectionTitle: string;
+  queryTitle: string;
 }
 
-export default function MovieList({ movies }: MovieListProps) {
+export default function MovieList({
+  sectionTitle,
+  queryTitle,
+}: MovieListProps) {
   const [movieList, setMovieLIst] = useState<Movie[]>([]);
 
   useEffect(() => {
-    if (movies) {
-      setMovieLIst(movies);
+    async function getMovie(query: string) {
+      const movies = await fetchMovies(query);
+      if (movies) {
+        setMovieLIst(movies);
+      }
     }
-  }, [movies]);
+
+    getMovie(queryTitle);
+  }, []);
+
+  // useEffect(() => {
+  //   if (movies) {
+  //     setMovieLIst(movies);
+  //   }
+  // }, [movies]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -44,7 +61,7 @@ export default function MovieList({ movies }: MovieListProps) {
     <div className="text-white">
       <section className="relative py-8 mt-16">
         <h2 className="text-2xl font-bold mb-4 text-white hover:text-gray-300 cursor-pointer ml-4">
-          Popular
+          {sectionTitle}
         </h2>
         <div className="relative">
           {showLeftArrow && (

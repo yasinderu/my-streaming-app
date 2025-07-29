@@ -5,9 +5,11 @@ import { tmdbClient } from "./axios";
 
 const tmdbBaseImageUrl = process.env.TMD_BASE_IMG_URL;
 
-export async function fetchMovies(): Promise<Movie[] | undefined> {
+export async function fetchMovies(
+  sectionTitle: string
+): Promise<Movie[] | undefined> {
   try {
-    const res = await tmdbClient.get("/movie/popular");
+    const res = await tmdbClient.get(`/movie/${sectionTitle}`);
 
     const results = res.data.results;
 
