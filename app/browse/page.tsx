@@ -2,11 +2,9 @@ import Hero from "@/components/browse/Hero";
 import MovieList from "@/components/browse/MovieList";
 import NavigationMenu from "@/components/NavigationMenu";
 import { MOVIE_SECTION_TITLES } from "@/lib/contants";
-import { fetchMovies } from "@/lib/tmdbActions";
 import React from "react";
 
-export default async function BrowseMoviePage() {
-  // const movies = await fetchMovies();
+export default function BrowseMoviePage() {
   return (
     <div>
       <NavigationMenu />
