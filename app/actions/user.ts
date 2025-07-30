@@ -15,6 +15,7 @@ export async function getUser(email: string): Promise<User | null> {
       username: result.username,
       password: result.password,
       _id: result._id.toString(),
+      id: result._id.toHexString(),
     };
   } catch (error) {
     console.error("Failed to fetch user:", error);

@@ -76,7 +76,7 @@ export default function MovieList({
 
   return (
     <>
-      {movieList.length && (
+      {!!movieList.length && (
         <div className="text-white">
           <section className="relative py-8 mt-16">
             <h2 className="text-2xl font-bold mb-4 text-white hover:text-gray-300 cursor-pointer ml-4">
