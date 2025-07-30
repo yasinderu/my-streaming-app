@@ -1,6 +1,6 @@
 "use client";
 
-import { Movie } from "@/types/Movies";
+import { Movie } from "@/types/Movie";
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import MovieCard from "./MovieCard";
@@ -16,7 +16,7 @@ export default function MovieList({
   queryTitle,
 }: MovieListProps) {
   const [movieList, setMovieLIst] = useState<Movie[]>([]);
-  const { favorite, addMovie, removeMovie } = useFavorite();
+  const { favorite, addMovie, getFavorite, removeMovie } = useFavorite();
 
   useEffect(() => {
     async function getMovie(query: string) {
@@ -28,11 +28,13 @@ export default function MovieList({
 
     if (queryTitle !== "favorite") {
       getMovie(queryTitle);
+    } else {
+      getFavorite();
     }
   }, []);
 
   useEffect(() => {
-    if (queryTitle === "favorite") {
+    if (favorite?.movies && queryTitle === "favorite") {
       setMovieLIst(favorite.movies);
     }
   }, [favorite]);
@@ -60,16 +62,16 @@ export default function MovieList({
     }
   };
 
-  const addToFavoriteHandler = (movieId: string) => {
+  const addToFavoriteHandler = async (movieId: string) => {
     const selectedMovie = movieList.find(
       (movie) => movie.id === movieId
     ) as Movie;
 
-    addMovie(selectedMovie);
+    await addMovie(selectedMovie);
   };
 
-  const removeFromFavoriteHandler = (movieId: string) => {
-    removeMovie(movieId);
+  const removeFromFavoriteHandler = async (movieId: string) => {
+    await removeMovie(movieId);
   };
 
   return (
@@ -98,12 +100,9 @@ export default function MovieList({
                 {movieList.map((movie: Movie, idx) => (
                   <MovieCard
                     key={idx}
-                    id={movie.id}
+                    movie={movie}
                     addToFavoriteHandler={addToFavoriteHandler}
                     removeFromFavoriteHandler={removeFromFavoriteHandler}
-                    title={movie.title}
-                    overview={movie.overview}
-                    poster={movie.poster_path}
                   />
                 ))}
               </div>

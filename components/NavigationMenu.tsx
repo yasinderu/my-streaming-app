@@ -6,6 +6,7 @@ import { ChevronDown, Bell, Search } from "lucide-react";
 import Image from "next/image";
 import { MENU_ACTIONS } from "@/lib/contants";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 const NavigationMenu = () => {
   const [profileIsOpen, setProfileIsOpen] = useState<boolean>(false);
@@ -33,25 +34,6 @@ const NavigationMenu = () => {
       );
     };
   });
-
-  const handleSignOut = async () => {
-    try {
-      const res = await fetch("/api/auth/logout", {
-        method: "GET",
-      });
-
-      console.log(res);
-
-      if (res.ok) {
-        router.push("/");
-      } else {
-        const errorData = await res.json();
-        console.log(errorData.message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <nav className="flex items-center justify-between h-16 px-8 bg-black sticky top-0 z-50">
@@ -148,7 +130,7 @@ const NavigationMenu = () => {
                   {action.name}
                 </a>
               ))}
-              <form action={handleSignOut}>
+              <form action={() => signOut()}>
                 <button
                   className="w-full text-center px-4 py-2 text-white hover:bg-gray-800 text-sm cursor-pointer border-t-2"
                   role="menuitem"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useFavorite } from "@/contexts/FavoriteMovieContext";
+import { Movie } from "@/types/Movie";
 import {
   CheckCircle,
   ChevronDown,
@@ -12,34 +13,29 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface MovieCardProps {
-  id: string;
-  title: string;
-  overview?: string;
-  poster: string | undefined;
+  movie: Movie;
   addToFavoriteHandler: (movieId: string) => void;
   removeFromFavoriteHandler: (movieId: string) => void;
 }
 
 export default function MovieCard({
-  title,
-  poster,
-  id,
+  movie,
   addToFavoriteHandler,
   removeFromFavoriteHandler,
 }: MovieCardProps) {
-  const saveToFavorite = (id: string) => {
+  const saveToFavorite = async (id: string) => {
     addToFavoriteHandler(id);
   };
   const { favorite } = useFavorite();
   const [isFavoriteMovie, setIsFavoriteMovie] = useState<boolean>(false);
 
   useEffect(() => {
-    if (favorite.movies.find((movie) => movie.id === id)) {
+    if (favorite && favorite?.movies?.find((item) => item.id === movie.id)) {
       setIsFavoriteMovie(true);
     } else {
       setIsFavoriteMovie(false);
     }
-  }, [favorite.movies]);
+  }, [favorite?.movies]);
 
   const removeFromFavorite = (id: string) => {
     removeFromFavoriteHandler(id);
@@ -49,8 +45,8 @@ export default function MovieCard({
     <div className="group">
       <div className="flex-none w-36 relative cursor-pointer group">
         <Image
-          src={poster || ""}
-          alt={title}
+          src={movie.poster_path || ""}
+          alt={movie.title}
           width={200}
           height={60}
           className="rounded-md object-cover h-auto group-hover:opacity-0 transition duration-200 delay-300"
@@ -58,8 +54,8 @@ export default function MovieCard({
       </div>
       <div className="absolute z-30 top-0 scale-0 bg-slate-800 w-56 transition duration-200 group-hover:scale-140 opacity-0 delay-300 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-x-[3vw]">
         <Image
-          src={poster || ""}
-          alt={title}
+          src={movie.poster_path || ""}
+          alt={movie.title}
           width={230}
           height={60}
           className="object-cover"
@@ -70,12 +66,12 @@ export default function MovieCard({
             {isFavoriteMovie ? (
               <CheckCircle
                 className="h-8 w-8 cursor-pointer"
-                onClick={() => removeFromFavorite(id)}
+                onClick={() => removeFromFavorite(movie.id)}
               />
             ) : (
               <PlusCircle
                 className="h-8 w-8 cursor-pointer"
-                onClick={() => saveToFavorite(id)}
+                onClick={() => saveToFavorite(movie.id)}
               />
             )}
             <ThumbsUp />

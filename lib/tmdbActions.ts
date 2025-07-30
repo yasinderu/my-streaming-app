@@ -1,6 +1,6 @@
 "use server";
 
-import { Movie } from "@/types/Movies";
+import { Movie } from "@/types/Movie";
 import { tmdbClient } from "./axios";
 
 const tmdbBaseImageUrl = process.env.TMD_BASE_IMG_URL;

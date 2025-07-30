@@ -1,8 +1,8 @@
 import clientPromise from "@/lib/mongodb";
 import { Favorite } from "@/types/Favorite";
-import { Movie } from "@/types/Movies";
+import { Movie } from "@/types/Movie";
 
-export async function getFavorites(userId: string): Promise<Favorite | null> {
+export async function getFavorite(userId: string): Promise<Favorite | null> {
   try {
     const client = await clientPromise;
     const db = client.db("stream-db");
@@ -26,7 +26,7 @@ export async function addMovieToFavorite(
   userId: string,
   movie: Movie
 ): Promise<Favorite | null> {
-  const fav = await getFavorites(userId);
+  const fav = await getFavorite(userId);
   const client = await clientPromise;
   const db = client.db("stream-db");
 
@@ -69,4 +69,26 @@ export async function addMovieToFavorite(
   if (!favoriteCollection) return null;
 
   return favoriteCollection;
+}
+
+export async function removeMovieFromFavorite(
+  userId: string,
+  movieId: string
+): Promise<Favorite | null> {
+  const fav = await getFavorite(userId);
+  const client = await clientPromise;
+  const db = client.db("stream-db");
+
+  if (!fav) return null;
+
+  const newMovies = fav.movies.filter((movie) => movie.id !== movieId);
+
+  await db
+    .collection("favorites")
+    .updateOne({ userId }, { $set: { movies: newMovies } });
+
+  return {
+    ...fav,
+    movies: newMovies,
+  };
 }
