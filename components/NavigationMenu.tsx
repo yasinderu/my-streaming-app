@@ -4,15 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { ChevronDown, Bell, Search } from "lucide-react";
 import Image from "next/image";
-import { MENU_ACTIONS } from "@/lib/contants";
-import { useRouter } from "next/navigation";
+import { MENU_ACTIONS } from "@/data";
 import { signOut } from "next-auth/react";
 
 const NavigationMenu = () => {
   const [profileIsOpen, setProfileIsOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

@@ -2,9 +2,10 @@
 
 import Hero from "@/components/browse/Hero";
 import MovieList from "@/components/browse/MovieList";
+import Footer from "@/components/Footer";
 import NavigationMenu from "@/components/NavigationMenu";
 import { FavoriteProvider } from "@/contexts/FavoriteMovieContext";
-import { MOVIE_SECTION_TITLES } from "@/lib/contants";
+import { MOVIE_SECTION_TITLES } from "@/data";
 import React from "react";
 
 export default async function BrowseMoviePage() {
@@ -14,13 +15,15 @@ export default async function BrowseMoviePage() {
       <Hero />
       <FavoriteProvider>
         {MOVIE_SECTION_TITLES.map((sec, idx) => (
-          <MovieList
-            key={idx}
-            sectionTitle={sec.displayText}
-            queryTitle={sec.queryText}
-          />
+          <div className="overflow-x-clip" key={idx}>
+            <MovieList
+              sectionTitle={sec.displayText}
+              queryTitle={sec.queryText}
+            />
+          </div>
         ))}
       </FavoriteProvider>
+      <Footer />
     </div>
   );
 }

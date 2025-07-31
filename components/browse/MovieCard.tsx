@@ -1,6 +1,7 @@
 "use client";
 
 import { useFavorite } from "@/contexts/FavoriteMovieContext";
+import { MOVIE_GENRES } from "@/data";
 import { Movie } from "@/types/Movie";
 import {
   CheckCircle,
@@ -10,7 +11,7 @@ import {
   ThumbsUp,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface MovieCardProps {
   movie: Movie;
@@ -28,6 +29,8 @@ export default function MovieCard({
   };
   const { favorite } = useFavorite();
   const [isFavoriteMovie, setIsFavoriteMovie] = useState<boolean>(false);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const [targetStyle, setTargetStyle] = useState({});
 
   useEffect(() => {
     if (favorite && favorite?.movies?.find((item) => item.id === movie.id)) {
@@ -41,9 +44,23 @@ export default function MovieCard({
     removeFromFavoriteHandler(id);
   };
 
+  const handlePopupPosition = () => {
+    if (parentRef.current) {
+      const rect = parentRef.current.getBoundingClientRect();
+
+      setTargetStyle({
+        left: rect.left,
+      });
+    }
+  };
+
   return (
     <div className="group">
-      <div className="flex-none w-36 relative cursor-pointer group">
+      <div
+        className="flex-none w-38 relative cursor-pointer group"
+        ref={parentRef}
+        onMouseEnter={handlePopupPosition}
+      >
         <Image
           src={movie.poster_path || ""}
           alt={movie.title}
@@ -52,7 +69,12 @@ export default function MovieCard({
           className="rounded-md object-cover h-auto group-hover:opacity-0 transition duration-200 delay-300"
         />
       </div>
-      <div className="absolute z-30 top-0 scale-0 bg-slate-800 w-56 transition duration-200 group-hover:scale-140 opacity-0 delay-300 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-x-[3vw]">
+      <div
+        style={{
+          ...targetStyle,
+        }}
+        className="absolute z-30 top-0 scale-0 bg-slate-800 w-56 transition duration-200 group-hover:scale-120 opacity-0 delay-300 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-[-4vw]"
+      >
         <Image
           src={movie.poster_path || ""}
           alt={movie.title}
@@ -78,7 +100,13 @@ export default function MovieCard({
           </div>
           <ChevronDown />
         </div>
-        <p className="px-6 py-2 text-white">Exciting · Kids · Rivalry</p>
+        {/* <div className="flex items-center wrap-break-word gap-2 p-2">
+          {movie.genre_ids?.map((genre, idx) => (
+            <span key={idx} className="text-white text-sm">
+              {MOVIE_GENRES[genre] && MOVIE_GENRES[genre]}
+            </span>
+          ))}
+        </div> */}
       </div>
     </div>
   );

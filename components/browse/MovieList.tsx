@@ -17,6 +17,17 @@ export default function MovieList({
 }: MovieListProps) {
   const [movieList, setMovieLIst] = useState<Movie[]>([]);
   const { favorite, addMovie, getFavorite, removeMovie } = useFavorite();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft + clientWidth < scrollWidth);
+    }
+  };
 
   useEffect(() => {
     async function getMovie(query: string) {
@@ -26,6 +37,8 @@ export default function MovieList({
       }
     }
 
+    // checkScroll();
+
     if (queryTitle !== "favorite") {
       getMovie(queryTitle);
     } else {
@@ -34,26 +47,22 @@ export default function MovieList({
   }, []);
 
   useEffect(() => {
+    // Initial check on mount
+    checkScroll();
+    const handleResize = () => checkScroll();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [movieList]);
+
+  useEffect(() => {
     if (favorite?.movies && queryTitle === "favorite") {
       setMovieLIst(favorite.movies);
     }
   }, [favorite]);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(true);
-
-  const checkScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setShowLeftArrow(scrollLeft > 0);
-      setShowRightArrow(scrollLeft + clientWidth < scrollWidth - 5);
-    }
-  };
-
   const scrollHorizontally = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.offsetWidth * 0.9;
+      const scrollAmount = scrollRef.current.offsetWidth * 0.88;
       scrollRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -78,7 +87,7 @@ export default function MovieList({
     <>
       {!!movieList.length && (
         <div className="text-white">
-          <section className="relative py-8 mt-16">
+          <section className="py-8 mt-16">
             <h2 className="text-2xl font-bold mb-4 text-white hover:text-gray-300 cursor-pointer ml-4">
               {sectionTitle}
             </h2>
@@ -95,7 +104,7 @@ export default function MovieList({
               <div
                 ref={scrollRef}
                 onScroll={checkScroll}
-                className="flex px-6 space-x-2.5 relative py-2"
+                className="flex overflow-hidden px-6 space-x-2.5 py-2"
               >
                 {movieList.map((movie: Movie, idx) => (
                   <MovieCard

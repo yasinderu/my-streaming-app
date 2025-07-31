@@ -21,6 +21,7 @@ export async function fetchMovies(
         release_date: movie.release_date,
         poster_path: `${tmdbBaseImageUrl}${movie.poster_path}`,
         backdrop_path: `${tmdbBaseImageUrl}${movie.backdrop_path}`,
+        genre_ids: movie.genre_ids,
       };
     });
 
