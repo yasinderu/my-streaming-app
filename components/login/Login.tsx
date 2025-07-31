@@ -61,8 +61,9 @@ const Login = () => {
               className="bg-red-600 text-white hover:bg-red-700 cursor-pointer rounded-none"
               type="submit"
               aria-disabled={pending}
+              disabled={pending}
             >
-              Sing In
+              {pending ? "Please Wait.." : "Sing In"}
             </Button>
             <div
               className="flex h-8 items-end space-x-1"

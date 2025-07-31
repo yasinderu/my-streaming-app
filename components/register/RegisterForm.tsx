@@ -55,7 +55,7 @@ const RegisterForm = () => {
               />
               <button
                 onClick={() => checkUserExists()}
-                className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded flex items-center justify-center text-lg ml-2"
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded flex items-center justify-center text-lg ml-2 disabled:bg-red-700"
                 disabled={loading}
               >
                 {loading ? "Please wait..." : "Get Started"}
