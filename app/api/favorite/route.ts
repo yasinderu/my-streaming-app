@@ -4,6 +4,14 @@ import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const session = await auth();
+
+  if (!session)
+    return new Response(
+      JSON.stringify({
+        message: "Unauthorized",
+      }),
+      { status: 401 }
+    );
   const userId = session?.user.id as string;
   const result = await getFavorite(userId);
 
@@ -13,6 +21,13 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const session = await auth();
+  if (!session)
+    return new Response(
+      JSON.stringify({
+        message: "Unauthorized",
+      }),
+      { status: 401 }
+    );
   const userId = session?.user.id as string;
 
   const result = await addMovieToFavorite(userId, body);
