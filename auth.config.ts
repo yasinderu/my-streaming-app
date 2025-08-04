@@ -8,11 +8,12 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnBrowse = nextUrl.pathname.startsWith("/browse");
+      const isOnPlay = nextUrl.pathname.startsWith("/play");
 
       if (isOnBrowse) {
         if (isLoggedIn) return true;
         return false;
-      } else if (isLoggedIn) {
+      } else if (isLoggedIn && !isOnPlay) {
         return Response.redirect(new URL("/browse", nextUrl));
       }
 

@@ -37,8 +37,6 @@ export default function MovieList({
       }
     }
 
-    // checkScroll();
-
     if (queryTitle !== "favorite") {
       getMovie(queryTitle);
     } else {
@@ -47,7 +45,6 @@ export default function MovieList({
   }, []);
 
   useEffect(() => {
-    // Initial check on mount
     checkScroll();
     const handleResize = () => checkScroll();
     window.addEventListener("resize", handleResize);

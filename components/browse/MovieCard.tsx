@@ -2,6 +2,7 @@
 
 import { useFavorite } from "@/contexts/FavoriteMovieContext";
 import { MOVIE_GENRES } from "@/data";
+import { getMovieTrailer } from "@/lib/utils";
 import { Movie } from "@/types/Movie";
 import {
   CheckCircle,
@@ -11,7 +12,10 @@ import {
   ThumbsUp,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import React from "react";
+import ReactPlayer from "react-player";
 
 interface MovieCardProps {
   movie: Movie;
@@ -31,6 +35,10 @@ export default function MovieCard({
   const [isFavoriteMovie, setIsFavoriteMovie] = useState<boolean>(false);
   const parentRef = useRef<HTMLDivElement>(null);
   const [targetStyle, setTargetStyle] = useState({});
+  const [playTrailer, setPlayTrailer] = useState(false);
+  const router = useRouter();
+
+  const movieTraler = getMovieTrailer(movie.id);
 
   useEffect(() => {
     if (favorite && favorite?.movies?.find((item) => item.id === movie.id)) {
@@ -44,13 +52,17 @@ export default function MovieCard({
     removeFromFavoriteHandler(id);
   };
 
-  const handlePopupPosition = () => {
+  const handlePopup = () => {
     if (parentRef.current) {
       const rect = parentRef.current.getBoundingClientRect();
 
       setTargetStyle({
         left: rect.left,
       });
+    }
+
+    if (!!movieTraler) {
+      setPlayTrailer(true);
     }
   };
 
@@ -59,7 +71,7 @@ export default function MovieCard({
       <div
         className="flex-none w-38 relative cursor-pointer group"
         ref={parentRef}
-        onMouseEnter={handlePopupPosition}
+        onMouseEnter={handlePopup}
       >
         <Image
           src={movie.poster_path || ""}
@@ -73,18 +85,31 @@ export default function MovieCard({
         style={{
           ...targetStyle,
         }}
-        className="absolute z-30 top-0 scale-0 bg-slate-800 w-56 transition duration-200 group-hover:scale-120 opacity-0 delay-300 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-[-4vw]"
+        onMouseLeave={() => setPlayTrailer(false)}
+        className="absolute z-30 top-0 scale-0 bg-slate-800 transition duration-200 group-hover:scale-120 opacity-0 delay-300 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-[-2vw]"
       >
-        <Image
-          src={movie.poster_path || ""}
-          alt={movie.title}
-          width={230}
-          height={60}
-          className="object-cover"
-        />
+        {!!movieTraler ? (
+          <ReactPlayer
+            src={movieTraler.playback}
+            playing={playTrailer}
+            style={{ width: 330, height: "200px" }}
+            muted={true}
+          />
+        ) : (
+          <Image
+            src={movie.poster_path || ""}
+            alt={movie.title}
+            width={230}
+            height={60}
+            className="object-cover"
+          />
+        )}
         <div className="flex justify-between p-6 items-center">
           <div className="flex space-x-3 items-center">
-            <PlayCircle className="h-8 w-8" />
+            <PlayCircle
+              className="h-8 w-8"
+              onClick={() => router.push(`/play/${movie.id}`)}
+            />
             {isFavoriteMovie ? (
               <CheckCircle
                 className="h-8 w-8 cursor-pointer"
