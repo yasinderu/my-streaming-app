@@ -1,13 +1,45 @@
 "use client";
 
 import { Play, Info } from "lucide-react";
+import { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 
 export default function Hero() {
+  const [playing, setPlaying] = useState(true);
+  const [heroScrolled, setHeroScrolled] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY;
+      const clientHeight = document.documentElement.clientHeight;
+
+      const scrollPercentage =
+        (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+      if (scrollPercentage >= 20 && !heroScrolled) {
+        setHeroScrolled(true);
+        setPlaying(false);
+      } else if (scrollPercentage < 20 && heroScrolled) {
+        setHeroScrolled(false);
+        setPlaying(true);
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [heroScrolled]);
   return (
     <section className="relative w-full h-screen flex items-center justify-start pl-12 overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/hero.jpg')] bg-cover bg-center bg-no-repeat">
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/0 to-black"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/0 to-black/70"></div>
+      <div className="absolute inset-0">
+        <ReactPlayer
+          src="https://www.youtube.com/watch?v=YoHD9XEInc0&t=3s"
+          style={{ width: "100%", height: "100%" }}
+          muted
+          playing={playing}
+        />
       </div>
 
       <div className="relative z-10 max-w-xl">

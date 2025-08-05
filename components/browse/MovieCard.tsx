@@ -1,7 +1,7 @@
 "use client";
 
 import { useFavorite } from "@/contexts/FavoriteMovieContext";
-// import { MOVIE_GENRES } from "@/data";
+import { MOVIE_GENRES } from "@/data";
 import { getMovieTrailer } from "@/lib/utils";
 import { Movie } from "@/types/Movie";
 import {
@@ -38,7 +38,7 @@ export default function MovieCard({
   const [playTrailer, setPlayTrailer] = useState(false);
   const router = useRouter();
 
-  const movieTraler = getMovieTrailer(movie.id);
+  const movieTrailer = getMovieTrailer(movie.id);
 
   useEffect(() => {
     if (favorite && favorite?.movies?.find((item) => item.id === movie.id)) {
@@ -61,7 +61,7 @@ export default function MovieCard({
       });
     }
 
-    if (!!movieTraler) {
+    if (!!movieTrailer) {
       setPlayTrailer(true);
     }
   };
@@ -88,11 +88,11 @@ export default function MovieCard({
         onMouseLeave={() => setPlayTrailer(false)}
         className="absolute z-30 top-0 scale-0 bg-slate-800 transition duration-200 group-hover:scale-120 opacity-0 delay-300 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-[-2vw]"
       >
-        {!!movieTraler ? (
+        {!!movieTrailer ? (
           <ReactPlayer
-            src={movieTraler.playback}
+            src={movieTrailer.playback}
             playing={playTrailer}
-            style={{ width: 330, height: "200px" }}
+            style={{ width: "100%", height: "240px" }}
             muted={true}
           />
         ) : (
@@ -100,8 +100,8 @@ export default function MovieCard({
             src={movie.poster_path || ""}
             alt={movie.title}
             width={230}
-            height={60}
-            className="object-cover"
+            height={40}
+            className="object-cover mx-auto"
           />
         )}
         <div className="flex justify-between p-6 items-center">
@@ -125,13 +125,19 @@ export default function MovieCard({
           </div>
           <ChevronDown />
         </div>
-        {/* <div className="flex items-center wrap-break-word gap-2 p-2">
+        <div className="flex flex-wrap items-center gap-2 p-6">
           {movie.genre_ids?.map((genre, idx) => (
-            <span key={idx} className="text-white text-sm">
-              {MOVIE_GENRES[genre] && MOVIE_GENRES[genre]}
-            </span>
+            <>
+              <p key={idx} className="text-white text-sm">
+                {/* @ts-expect-error: movie genres is match guarantee */}
+                {MOVIE_GENRES[genre] && MOVIE_GENRES[genre]}
+              </p>
+              {idx < movie.genre_ids?.length - 1 && (
+                <div className="w-1 h-1 rounded-full bg-white last:di"></div>
+              )}
+            </>
           ))}
-        </div> */}
+        </div>
       </div>
     </div>
   );
