@@ -1,7 +1,7 @@
 "use client";
 
 import { useFavorite } from "@/contexts/FavoriteMovieContext";
-import { MOVIE_GENRES } from "@/data";
+// import { MOVIE_GENRES } from "@/data";
 import { getMovieTrailer } from "@/lib/utils";
 import { Movie } from "@/types/Movie";
 import {

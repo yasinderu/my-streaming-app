@@ -10,10 +10,10 @@ export const authConfig = {
       const isOnBrowse = nextUrl.pathname.startsWith("/browse");
       const isOnPlay = nextUrl.pathname.startsWith("/play");
 
-      if (isOnBrowse) {
+      if (isOnBrowse || isOnPlay) {
         if (isLoggedIn) return true;
         return false;
-      } else if (isLoggedIn && !isOnPlay) {
+      } else if (isLoggedIn) {
         return Response.redirect(new URL("/browse", nextUrl));
       }
 
