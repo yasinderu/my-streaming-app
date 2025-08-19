@@ -39,7 +39,6 @@ export default function MovieCard({
   const [targetStyle, setTargetStyle] = useState({});
   const [playTrailer, setPlayTrailer] = useState(false);
   const router = useRouter();
-  // const { showMovieDetail, movieDetail } = useMovieDetail();
 
   const movieTrailer = getMovieTrailer(movie.id);
 

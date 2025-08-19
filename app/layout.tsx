@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { MovieDetailProvider } from "@/contexts/MovieDetailContext";
+import { FavoriteProvider } from "@/contexts/FavoriteMovieContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,9 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          <MovieDetailProvider>{children}</MovieDetailProvider>
+          <FavoriteProvider>
+            <MovieDetailProvider>{children}</MovieDetailProvider>
+          </FavoriteProvider>
         </ThemeProvider>
       </body>
     </html>

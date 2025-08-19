@@ -1,13 +1,32 @@
 "use client";
 
+import { useFavorite } from "@/contexts/FavoriteMovieContext";
 import { useMovieDetail } from "@/contexts/MovieDetailContext";
 import { MOVIE_GENRES } from "@/data";
-import { useRef, useEffect } from "react";
+import { Movie } from "@/types/Movie";
+import { CircleCheck, PlayIcon, PlusCircle, XIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useRef, useEffect, useState } from "react";
 
 export default function MovieDetail() {
   const { showMovieDetail, handleShowMovieDetail, movieDetail } =
     useMovieDetail();
+  const { favorite, removeMovie, addMovie } = useFavorite();
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isFavoriteMovie, setIsFavoriteMovie] = useState<boolean>(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (movieDetail)
+      if (
+        favorite &&
+        favorite?.movies?.find((item) => item.id === movieDetail.id)
+      ) {
+        setIsFavoriteMovie(true);
+      } else {
+        setIsFavoriteMovie(false);
+      }
+  }, [favorite?.movies, movieDetail]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,83 +65,51 @@ export default function MovieDetail() {
 
   if (!showMovieDetail) return null;
 
+  const removeMovieFromFavorite = async (movieId: string) => {
+    await removeMovie(movieId);
+  };
+
+  const addToFavorite = async (movie: Movie) => {
+    await addMovie(movie);
+  };
+
   return (
     <div className="fixed bg-gray-950 bg-opacity-75 flex items-center justify-center z-50 top-[50%] left-[50%] w-[720px] transform translate-x-[-50%] translate-y-[-50%]">
-      {movieDetail && (
-        <div
-          ref={modalRef}
-          className="bg-black text-white rounded-xl shadow-2xl overflow-hidden max-w-4xl w-full transform transition-all duration-300 scale-95 opacity-0 animate-scale-in"
-        >
+      <div
+        ref={modalRef}
+        className="bg-black overflow-auto h-screen text-white rounded-xl shadow-2xl max-w-4xl w-full transform transition-all duration-300 scale-95 opacity-0 animate-scale-in"
+      >
+        {movieDetail && (
           <div className="relative">
             <div className="relative">
-              <img
-                src="https://placehold.co/1280x720/000000/ffffff?text=DEXTER"
-                alt="Dexter show poster"
-                className="w-full h-auto rounded-t-xl"
-              />
+              <div className="flex flex-row justify-center">
+                <img
+                  src={movieDetail.poster_path}
+                  alt="Dexter show poster"
+                  className="w-[400px] rounded-t-xl"
+                />
+              </div>
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
                 <div className="flex items-center space-x-4">
-                  <button className="flex items-center space-x-2 bg-white text-black font-bold py-2 px-6 rounded-full hover:bg-gray-200 transition-colors">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                  <button
+                    onClick={() => router.push(`/play/${movieDetail.id}`)}
+                    className="flex items-center space-x-2 bg-white text-black font-bold py-2 px-6 rounded-sm cursor-pointer hover:bg-gray-200 transition-colors"
+                  >
+                    <PlayIcon className="w-6 h-6" />
                     <span>Play</span>
                   </button>
-                  <button className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-600 bg-opacity-70 text-white hover:bg-gray-500 transition-colors">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
-                  </button>
-                  <button className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-600 bg-opacity-70 text-white hover:bg-gray-500 transition-colors">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.684 13.342C8.88 15.19 9.11 19.167 11.25 21c2.14-1.833 2.37-5.81 2.566-7.658M12 4V2m0 20v-2M12 12V6m-1-1v2m-1-1H7M15 5h-2m2 1v2M9 13h2m-2-2h2m-2-2h2m-2-2h2"
-                      />
-                    </svg>
-                  </button>
-                </div>
-                <div className="ml-auto">
-                  <button className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-600 bg-opacity-70 text-white hover:bg-gray-500 transition-colors">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15.536 8.464a5 5 0 00-7.072 0l-2.828 2.828a5 5 0 007.072 7.072l1.414-1.414M11.464 15.536a5 5 0 007.072 0l2.828-2.828a5 5 0 00-7.072-7.072l-1.414 1.414M4 12h16"
-                      />
-                    </svg>
-                  </button>
+                  {isFavoriteMovie ? (
+                    <CircleCheck
+                      className="h-10 w-10 cursor-pointer"
+                      onClick={() => removeMovieFromFavorite(movieDetail.id)}
+                    />
+                  ) : (
+                    <PlusCircle
+                      className="h-10 w-10 cursor-pointer"
+                      onClick={() => addToFavorite(movieDetail)}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -136,10 +123,6 @@ export default function MovieDetail() {
                     HD
                   </span>
                 </div>
-                <p className="text-sm">
-                  violence, sex, nudity, language, substances, sexual violence,
-                  suicide, sexual violence references
-                </p>
                 <p className="mt-4 text-sm leading-relaxed">
                   {movieDetail.overview}
                 </p>
@@ -151,10 +134,12 @@ export default function MovieDetail() {
                       Genres:{" "}
                     </span>
                     <span className="text-white">
-                      {movieDetail.genre_ids.map(
-                        /* @ts-expect-error: movie genres is match guarantee */
-                        (id) => `${MOVIE_GENRES[id]}, `
-                      )}
+                      {movieDetail.genre_ids
+                        .map(
+                          /* @ts-expect-error: movie genres is match guarantee */
+                          (id) => MOVIE_GENRES[id]
+                        )
+                        .join(", ")}
                     </span>
                   </div>
                 </div>
@@ -165,24 +150,11 @@ export default function MovieDetail() {
               className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors bg-gray-800 bg-opacity-70 p-2 rounded-full"
               aria-label="Close modal"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <XIcon />
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -14,16 +14,15 @@ export default async function BrowseMoviePage() {
     <div>
       <NavigationMenu />
       <Hero />
-      <FavoriteProvider>
-        {MOVIE_SECTION_TITLES.map((sec, idx) => (
-          <div className="overflow-x-clip" key={idx}>
-            <MovieList
-              sectionTitle={sec.displayText}
-              queryTitle={sec.queryText}
-            />
-          </div>
-        ))}
-      </FavoriteProvider>
+
+      {MOVIE_SECTION_TITLES.map((sec, idx) => (
+        <div className="overflow-x-clip" key={idx}>
+          <MovieList
+            sectionTitle={sec.displayText}
+            queryTitle={sec.queryText}
+          />
+        </div>
+      ))}
 
       <MovieDetail />
       <Footer />
