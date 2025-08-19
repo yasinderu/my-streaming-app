@@ -30,3 +30,28 @@ export async function fetchMovies(
     console.log(error);
   }
 }
+
+export async function fetchMovieDetails(
+  movieId: string
+): Promise<Movie | undefined> {
+  try {
+    const res = await tmdbClient.get(`/movie/${movieId}`);
+
+    const result = res.data;
+
+    const movie: Movie = {
+      id: result.id,
+      title: result.title,
+      overview: result.overview,
+      poster_path: `${tmdbBaseImageUrl}${result.poster_path}`,
+      genre_ids: result.genres.map(
+        (genre: { id: number; name: string }) => genre.id
+      ),
+      release_date: result.release_date,
+    };
+
+    return movie;
+  } catch (error) {
+    console.log(error);
+  }
+}

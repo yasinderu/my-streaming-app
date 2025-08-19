@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import MovieCard from "./MovieCard";
 import { fetchMovies } from "@/lib/tmdbActions";
 import { useFavorite } from "@/contexts/FavoriteMovieContext";
+import { useMovieDetail } from "@/contexts/MovieDetailContext";
 interface MovieListProps {
   sectionTitle: string;
   queryTitle: string;
@@ -20,6 +21,7 @@ export default function MovieList({
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
+  const { handleShowMovieDetail, getMovieDetail } = useMovieDetail();
 
   const checkScroll = () => {
     if (scrollRef.current) {
@@ -80,6 +82,12 @@ export default function MovieList({
     await removeMovie(movieId);
   };
 
+  const showDetail = async (shoudlShow: boolean, movieId: string) => {
+    handleShowMovieDetail(shoudlShow);
+
+    await getMovieDetail(movieId);
+  };
+
   return (
     <>
       {!!movieList.length && (
@@ -97,7 +105,6 @@ export default function MovieList({
                   <ChevronLeft className="w-20 h-20" />
                 </button>
               )}
-
               <div
                 ref={scrollRef}
                 onScroll={checkScroll}
@@ -109,6 +116,7 @@ export default function MovieList({
                     movie={movie}
                     addToFavoriteHandler={addToFavoriteHandler}
                     removeFromFavoriteHandler={removeFromFavoriteHandler}
+                    showDetail={showDetail}
                   />
                 ))}
               </div>

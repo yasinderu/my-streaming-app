@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { MovieDetailProvider } from "@/contexts/MovieDetailContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,7 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          {children}
+          <MovieDetailProvider>{children}</MovieDetailProvider>
         </ThemeProvider>
       </body>
     </html>

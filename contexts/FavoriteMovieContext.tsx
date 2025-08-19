@@ -198,7 +198,7 @@ export const FavoriteProvider = ({ children }: FavoriteProviderProps) => {
 export const useFavorite = (): FavoriteMovieContextType => {
   const context = useContext(FavoriteMovieContext);
   if (!context) {
-    throw new Error("useFavorite must be used within an FavoriteProvider");
+    throw new Error("useFavorite must be used within a FavoriteProvider");
   }
 
   return context;

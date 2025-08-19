@@ -21,12 +21,14 @@ interface MovieCardProps {
   movie: Movie;
   addToFavoriteHandler: (movieId: string) => void;
   removeFromFavoriteHandler: (movieId: string) => void;
+  showDetail: (openModal: boolean, movieId: string) => void;
 }
 
 export default function MovieCard({
   movie,
   addToFavoriteHandler,
   removeFromFavoriteHandler,
+  showDetail,
 }: MovieCardProps) {
   const saveToFavorite = async (id: string) => {
     addToFavoriteHandler(id);
@@ -37,6 +39,7 @@ export default function MovieCard({
   const [targetStyle, setTargetStyle] = useState({});
   const [playTrailer, setPlayTrailer] = useState(false);
   const router = useRouter();
+  // const { showMovieDetail, movieDetail } = useMovieDetail();
 
   const movieTrailer = getMovieTrailer(movie.id);
 
@@ -123,7 +126,7 @@ export default function MovieCard({
             )}
             <ThumbsUp />
           </div>
-          <ChevronDown />
+          <ChevronDown onClick={() => showDetail(true, movie.id)} />
         </div>
         <div className="flex flex-wrap items-center gap-2 p-6">
           {movie.genre_ids?.map((genre, idx) => (

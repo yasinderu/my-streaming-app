@@ -1,6 +1,7 @@
 "use server";
 
 import Hero from "@/components/browse/Hero";
+import MovieDetail from "@/components/browse/MovieDetail";
 import MovieList from "@/components/browse/MovieList";
 import Footer from "@/components/Footer";
 import NavigationMenu from "@/components/NavigationMenu";
@@ -23,6 +24,8 @@ export default async function BrowseMoviePage() {
           </div>
         ))}
       </FavoriteProvider>
+
+      <MovieDetail />
       <Footer />
     </div>
   );
