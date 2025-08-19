@@ -4,7 +4,7 @@ export async function GET(
   request: Request,
   { params }: { params: { movieId: string } }
 ) {
-  const { movieId } = await params;
+  const { movieId } = params;
 
   const movieDetail = await fetchMovieDetails(movieId);
 
