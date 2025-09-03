@@ -128,7 +128,18 @@ const NavigationMenu = () => {
                   {action.name}
                 </a>
               ))}
-              <form action={() => signOut()}>
+              <form
+                action={async () => {
+                  await fetch("/api/cookies", {
+                    method: "POST",
+                    body: JSON.stringify({
+                      cookiesName: "profileId",
+                      actionType: "del",
+                    }),
+                  });
+                  signOut();
+                }}
+              >
                 <button
                   className="w-full text-center px-4 py-2 text-white hover:bg-gray-800 text-sm cursor-pointer border-t-2"
                   role="menuitem"

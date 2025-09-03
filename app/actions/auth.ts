@@ -36,9 +36,25 @@ export async function signup(state: FormState, formData: FormData) {
 
   const result = await db.collection("accounts").insertOne(newUser);
 
+  const newProfile = {
+    name: username,
+    pin: "",
+    userId: result.insertedId.toString(),
+    avatar:
+      "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png",
+  };
+
+  const profile = await db.collection("users").insertOne(newProfile);
+
   if (!result) {
     return {
       message: "An error occurred while creating your account.",
+    };
+  }
+
+  if (!profile) {
+    return {
+      message: "An error occured while creating profile",
     };
   }
 
