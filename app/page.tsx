@@ -6,7 +6,7 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 sm:items-start">
         <div className="w-2xl text-center mt-[10%] xl:mt-[30%]">
           <h1 className="text-6xl/normal font-bold tracking-tight">
-            Lorem Ipsum, Dolor, sit Amet, Consectetur.
+            Unlimited movies, TV shows, and more
           </h1>
           <RegisterForm />
         </div>

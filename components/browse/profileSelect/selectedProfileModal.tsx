@@ -23,7 +23,11 @@ export default function SelectedProfileModal({
             : "You have been logged in."}
         </p>
         <button
-          onClick={() => window.location.reload()}
+          onClick={() =>
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000)
+          }
           className="bg-neutral-600 text-white px-4 py-2 rounded-lg hover:bg-neutral-700 transition-colors"
         >
           Close
